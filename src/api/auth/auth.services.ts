@@ -248,7 +248,7 @@ export const forgotPasswordRequestFn = async (
       from: "Finthest",
       to: user.email,
       subject: "Forgot Passsword Request",
-      html: `Link forgot password: ${token}`,
+      html: `Link forgot password: <a href="${process.env.ORIGIN}/forgot-password/${token}">Klik disini</a>`,
     });
 
     return res
