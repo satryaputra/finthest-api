@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: finthest-postgres
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: finthest
+    ports:
+      - 5432:5432
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finthest-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@finthest-postgres:5432/finthest?schema=public
+      - APP_PORT=8000
+
+
