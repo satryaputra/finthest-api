@@ -1,6 +1,5 @@
 import type { Response, NextFunction } from "express";
 import type { AuthenticatedRequest } from "../../utils/types";
-import { Token } from "../../utils/token";
 import { db } from "../../utils/db";
 
 /**

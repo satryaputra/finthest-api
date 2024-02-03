@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "set NODE_ENV=development && nodemon src/index.ts",
+    "dev:node": "set NODE_ENV=development && ts-node src/index.ts",
     "start": "tsc && node dist",
     "build": "tsc",
     "generate": "prisma generate",
