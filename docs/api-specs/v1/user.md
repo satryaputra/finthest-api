@@ -1,5 +1,6 @@
+# User API Spec
 
-## Update User API
+## Get Current User API
 
 Endpoint : [GET]() `/users/me`
 
