@@ -9,7 +9,7 @@ export class Token {
   ): string => {
     return jwt.sign(payload, secretOrPrivateKey, {
       ...options,
-      expiresIn: "30s",
+      expiresIn: "30m",
     });
   };
 
