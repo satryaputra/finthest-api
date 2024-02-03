@@ -17,8 +17,8 @@ import {
 export const authController = Router();
 
 authController.post("/login", loginValidation, loginFn);
-authController.post("/register", registerValidation, registerFn);
+authController.post("/signup", registerValidation, registerFn);
 authController.post("/refresh", refreshTokenValidation, refreshTokenFn);
 authController.post("/logout", authenticated, loginFn);
-authController.post("/forgot-password/request", forgotPasswordRequestValidation, forgotPasswordRequestFn);
-authController.post("/forgot-password", forgotPasswordFn);
+authController.post("/password/forgot", forgotPasswordRequestValidation, forgotPasswordRequestFn);
+authController.post("/password/reset", forgotPasswordFn);
