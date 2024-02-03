@@ -13,7 +13,7 @@ Request Body :
 }
 ```
 
-Response Body Success :
+Response Body Success `200` :
 
 ```json
 {
@@ -35,7 +35,7 @@ Request Body :
 }
 ```
 
-Response Body Success :
+Response Body Success `201` :
 
 ```json
 {
@@ -53,7 +53,7 @@ Query Param :
 
 - accessToken : String , a expired JWT
 
-Response Body Success :
+Response Body Success `200` :
 
 ```json
 {
