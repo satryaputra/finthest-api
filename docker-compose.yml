@@ -23,6 +23,5 @@ services:
       - db
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@finthest-postgres:5432/finthest?schema=public
-      - APP_PORT=8000
 
 
