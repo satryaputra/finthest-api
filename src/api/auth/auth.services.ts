@@ -32,10 +32,10 @@ export const loginFn = async (
     });
 
     if (!user) {
-      throw new NotFoundError("Email belum terdaftar");
+      throw new ClientError("Email salah");
     }
 
-    if (!Password.verify(password, user.passwordHash)) {
+    if (!(await Password.verifyAsync(password, user.passwordHash))) {
       throw new ClientError("Password salah");
     }
 
@@ -63,13 +63,13 @@ export const loginFn = async (
 
 /**
  * Hanldes user registration.
- * @function registerFn
+ * @function signupFn
  * @param req - Express Request object
  * @param res - Express Response object
  * @param next - Express NextFunction middleware
  * @returns Express Response
  */
-export const registerFn = async (
+export const signupFn = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -91,7 +91,7 @@ export const registerFn = async (
       data: {
         name,
         email,
-        passwordHash: await Password.hash(password),
+        passwordHash: await Password.hashAsync(password),
         refreshToken: token,
         refreshTokenExpire: expire,
         updatedAt: null,
@@ -217,14 +217,14 @@ export const logoutFn = async (
 };
 
 /**
- * Handles forgot password request.
- * @function forgotPasswordRequestFn
+ * Handles forgot password.
+ * @function forgotPasswordFn
  * @param {Request} req Express Request object
  * @param {Response} res Express Response object
  * @param {NextFunction} next Express NextFunction middleware
  * @returns {Promise<Response>} Express Response
  */
-export const forgotPasswordRequestFn = async (
+export const forgotPasswordFn = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -240,8 +240,8 @@ export const forgotPasswordRequestFn = async (
       throw new NotFoundError("Email belum terdaftar");
     }
 
-    const token = Token.jwt({ userId: user.id }, process.env.OTHER_SECRET, {
-      expiresIn: "30m",
+    const token = Token.jwt({ userId: user.id }, process.env.RESET_PW_SECRET, {
+      expiresIn: process.env.RESET_PW_EXPIRE,
     });
 
     await transporter.sendMail({
@@ -260,42 +260,52 @@ export const forgotPasswordRequestFn = async (
 };
 
 /**
- * Handles forgot password
- * @function forgotPasswordFn
+ * Handles reset password
+ * @function resetPasswordFn
  * @param {Request} req Express Request object
  * @param {Response} res Express Response object
  * @param {NextFunction} next Express NextFunction middleware
  * @returns {Promise<Response>} Express Response
  */
-export const forgotPasswordFn = async (
+export const resetPasswordFn = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response> => {
   try {
-    const { token, newPassword } = req.body;
+    try {
+      const { token, newPassword } = req.body;
 
-    const { userId } = Token.claim(token, process.env.OTHER_SECRET) as {
-      userId: string;
-    };
+      const { userId } = Token.claim(token, process.env.RESET_PW_SECRET) as {
+        userId: string;
+      };
 
-    const user = await _db.users.findUnique({
-      where: { id: userId },
-    });
+      const user = await _db.users.findUnique({
+        where: { id: userId },
+      });
 
-    if (!user) {
-      throw new ClientError("Token tidak valid");
+      if (!user) {
+        throw new ClientError("Token tidak valid");
+      }
+
+      if (await Password.verifyAsync(newPassword, user.passwordHash)) {
+        throw new ConflictError(
+          "Password baru tidak boleh sama dengan password lama"
+        );
+      }
+
+      await _db.users.update({
+        where: { id: user.id },
+        data: {
+          passwordHash: await Password.hashAsync(newPassword),
+          updatedAt: new Date(),
+        },
+      });
+
+      return res.status(200).json({ message: "Berhasil reset password" });
+    } catch (error) {
+      throw new Error("invalid_reset_password_token");
     }
-
-    await _db.users.update({
-      where: { id: user.id },
-      data: {
-        passwordHash: await Password.hash(newPassword),
-        updatedAt: new Date(),
-      },
-    });
-
-    return res.status(200).json({ message: "Berhasil reset password" });
   } catch (error) {
     next(error);
   }
