@@ -1,25 +1,46 @@
 import { Router } from "express";
-import { authenticated } from "../../middlewares";
+import { authenticated, validateRequest } from "../../middlewares";
 import {
   forgotPasswordFn,
-  forgotPasswordRequestFn,
+  resetPasswordFn,
   loginFn,
   logoutFn,
   refreshTokenFn,
-  registerFn,
+  signupFn,
 } from "./auth.services";
 import {
-  forgotPasswordRequestValidation,
+  forgotPasswordValidation,
   loginValidation,
   refreshTokenValidation,
   registerValidation,
+  resetPasswordValidation,
 } from "./auth.validators";
 
 export const authController = Router();
 
-authController.post("/login", loginValidation, loginFn);
-authController.post("/signup", registerValidation, registerFn);
-authController.post("/refresh", refreshTokenValidation, refreshTokenFn);
+authController.post("/login", loginValidation, validateRequest, loginFn);
+
+authController.post("/signup", registerValidation, validateRequest, signupFn);
+
+authController.post(
+  "/refresh",
+  refreshTokenValidation,
+  validateRequest,
+  refreshTokenFn
+);
+
 authController.post("/logout", authenticated, logoutFn);
-authController.post("/password/forgot", forgotPasswordRequestValidation, forgotPasswordRequestFn);
-authController.post("/password/reset", forgotPasswordFn);
+
+authController.post(
+  "/password/forgot",
+  forgotPasswordValidation,
+  validateRequest,
+  forgotPasswordFn
+);
+
+authController.post(
+  "/password/reset",
+  resetPasswordValidation,
+  validateRequest,
+  resetPasswordFn
+);

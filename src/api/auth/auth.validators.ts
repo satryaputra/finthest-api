@@ -1,5 +1,4 @@
 import { body, query } from "express-validator";
-import { validateRequest } from "../../middlewares";
 
 export const loginValidation = [
   body("email")
@@ -12,7 +11,6 @@ export const loginValidation = [
     .withMessage("Password diperlukan")
     .isLength({ min: 8, max: 32 })
     .withMessage("Password minimal 8 karakter dan maksimal 32 karakter"),
-  validateRequest,
 ];
 
 export const registerValidation = [
@@ -31,7 +29,6 @@ export const registerValidation = [
     .withMessage("Password diperlukan")
     .isLength({ min: 8, max: 32 })
     .withMessage("Password minimal 8 karakter dan maksimal 32 karakter"),
-  validateRequest,
 ];
 
 export const refreshTokenValidation = [
@@ -40,14 +37,25 @@ export const refreshTokenValidation = [
     .withMessage("Akses token diperlukan")
     .isJWT()
     .withMessage("Format token salah"),
-  validateRequest,
 ];
 
-export const forgotPasswordRequestValidation = [
+export const forgotPasswordValidation = [
   query("email")
     .notEmpty()
     .withMessage("Email diperlukan")
     .isEmail()
     .withMessage("Format email salah"),
-  validateRequest,
+];
+
+export const resetPasswordValidation = [
+  body("token")
+    .notEmpty()
+    .withMessage("Token diperlukan")
+    .isJWT()
+    .withMessage("Token tidak valid"),
+  body("newPassword")
+    .notEmpty()
+    .withMessage("Password diperlukan")
+    .isLength({ min: 8, max: 32 })
+    .withMessage("Password minimal 8 karakter dan maksimal 32 karakter"),
 ];
