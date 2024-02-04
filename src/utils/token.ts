@@ -4,18 +4,18 @@ import crypto from "crypto";
 export class Token {
   static jwt = (
     payload: string | object | Buffer,
-    secretOrPrivateKey = process.env.ACCESS_SECRET,
+    secretOrPrivateKey = process.env.ACCESS_TOKEN_SECRET,
     options?: jwt.SignOptions
   ): string => {
     return jwt.sign(payload, secretOrPrivateKey, {
       ...options,
-      expiresIn: "30m",
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRE,
     });
   };
 
   static claim = (
     token: string,
-    secretOrPrivateKey = process.env.ACCESS_SECRET,
+    secretOrPrivateKey = process.env.ACCESS_TOKEN_SECRET,
     options?: jwt.VerifyOptions & {
       complete?: false;
     }
@@ -26,7 +26,7 @@ export class Token {
   static refresh = (): { token: string; expire: Date } => {
     const token = crypto.randomBytes(32).toString("hex");
     const expire = new Date();
-    expire.setDate(expire.getDate() + 7);
+    expire.setDate(expire.getDate() + 7); // 7 days
 
     return {
       token,
