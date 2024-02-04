@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticated } from "../../utils/middlewares";
+import { authenticated } from "../../middlewares";
 import {
   forgotPasswordFn,
   forgotPasswordRequestFn,

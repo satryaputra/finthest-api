@@ -1,15 +1,15 @@
 import type { Request, Response, NextFunction } from "express";
-import { db } from "../../utils/db";
+import { _db } from "../../utils/_db";
+import { Password } from "../../utils/password";
+import { Token } from "../../utils/token";
+import type { AuthenticatedRequest, User } from "../../utils/types";
+import transporter from "../../utils/nodemailer/transporter";
 import {
   NotFoundError,
   ClientError,
   ConflictError,
   ForbiddenError,
-} from "../../utils/exceptions";
-import { Password } from "../../utils/password";
-import { Token } from "../../utils/token";
-import { AuthenticatedRequest, User } from "../../utils/types";
-import transporter from "../../utils/nodemailer/transporter";
+} from "../../exceptions";
 
 /**
  * Handles user login.
@@ -27,7 +27,7 @@ export const loginFn = async (
   try {
     const { email, password } = req.body as Omit<User, "id" | "name">;
 
-    const user = await db.users.findUnique({
+    const user = await _db.users.findUnique({
       where: { email: email },
     });
 
@@ -41,7 +41,7 @@ export const loginFn = async (
 
     const { token, expire } = Token.refresh();
 
-    await db.users.update({
+    await _db.users.update({
       where: { id: user.id },
       data: {
         refreshToken: token,
@@ -77,7 +77,7 @@ export const registerFn = async (
   try {
     const { name, email, password } = req.body as Omit<User, "id">;
 
-    const user = await db.users.findUnique({
+    const user = await _db.users.findUnique({
       where: { email: email },
     });
 
@@ -87,7 +87,7 @@ export const registerFn = async (
 
     const { token, expire } = Token.refresh();
 
-    const newUser = await db.users.create({
+    const newUser = await _db.users.create({
       data: {
         name,
         email,
@@ -133,7 +133,7 @@ export const refreshTokenFn = async (
       ignoreExpiration: true,
     }) as { userId: string };
 
-    const user = await db.users.findUnique({
+    const user = await _db.users.findUnique({
       where: { id: userId },
     });
 
@@ -154,7 +154,7 @@ export const refreshTokenFn = async (
 
     const { token, expire } = Token.refresh();
 
-    await db.users.update({
+    await _db.users.update({
       where: { id: user.id },
       data: {
         refreshToken: token,
@@ -191,7 +191,7 @@ export const logoutFn = async (
   try {
     const { userId } = req.decodeToken as { userId: string };
 
-    const user = await db.users.findUnique({
+    const user = await _db.users.findUnique({
       where: {
         id: userId,
       },
@@ -201,7 +201,7 @@ export const logoutFn = async (
       throw new NotFoundError("User tidak ditemukan");
     }
 
-    await db.users.update({
+    await _db.users.update({
       where: { id: user.id },
       data: {
         refreshToken: null,
@@ -232,7 +232,7 @@ export const forgotPasswordRequestFn = async (
   try {
     const { email } = req.query as { email: string };
 
-    const user = await db.users.findUnique({
+    const user = await _db.users.findUnique({
       where: { email: email },
     });
 
@@ -279,7 +279,7 @@ export const forgotPasswordFn = async (
       userId: string;
     };
 
-    const user = await db.users.findUnique({
+    const user = await _db.users.findUnique({
       where: { id: userId },
     });
 
@@ -287,7 +287,7 @@ export const forgotPasswordFn = async (
       throw new ClientError("Token tidak valid");
     }
 
-    await db.users.update({
+    await _db.users.update({
       where: { id: user.id },
       data: {
         passwordHash: await Password.hash(newPassword),

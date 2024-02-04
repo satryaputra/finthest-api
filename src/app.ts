@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import { errorHandler } from "./utils/middlewares";
+import { errorHandler } from "./middlewares";
 import api from "./api";
 
 const app = express();

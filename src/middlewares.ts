@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
-import type { AuthenticatedRequest } from "./types";
+import type { AuthenticatedRequest } from "./utils/types";
 import { validationResult } from "express-validator";
 import { ClientError, UnauthorizedError } from "./exceptions";
-import { Token } from "./token";
+import { Token } from "./utils/token";
 
 export const validateRequest = (
   req: Request,

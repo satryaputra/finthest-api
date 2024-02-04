@@ -1,6 +1,6 @@
 import type { Response, NextFunction } from "express";
 import type { AuthenticatedRequest } from "../../utils/types";
-import { db } from "../../utils/db";
+import { _db } from "../../utils/_db";
 
 /**
  * Get me (current user logged in)
@@ -17,7 +17,7 @@ export const meFn = async (
 ): Promise<Response> => {
   try {
     const { userId } = req.decodeToken as { userId: string };
-    const user = await db.users.findUnique({
+    const user = await _db.users.findUnique({
       where: { id: userId },
       select: {
         id: true,

@@ -1,5 +1,5 @@
 import { body, query } from "express-validator";
-import { validateRequest } from "../../utils/middlewares";
+import { validateRequest } from "../../middlewares";
 
 export const loginValidation = [
   body("email")

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticated } from "../../utils/middlewares";
+import { authenticated } from "../../middlewares";
 import { meFn } from "./users.services";
 
 export const usersController = Router();
