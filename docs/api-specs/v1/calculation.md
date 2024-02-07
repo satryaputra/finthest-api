@@ -13,8 +13,9 @@ Request Body :
 ```json
 {
   "salary": 5000000,
-  "loan": 2000000, // nullable
-  "interest": 2, // percent per month, nullable
+  "loan": 15000000, // nullable
+  "interest": 10, // percent per month, nullable
+  "interestType": "year",
   "paidOff": 12, // month, nullable
   "savings": 10000000, // nullable
   "travelling": false,
