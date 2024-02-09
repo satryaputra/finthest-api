@@ -3,4 +3,5 @@ import { calculationFn } from "./calculation.services";
 import { authenticated } from "../../middlewares";
 
 export const calculationController = Router();
-calculationController.post("/addCalculation", calculationFn);
+
+calculationController.post("/", authenticated, calculationFn);
