@@ -32,11 +32,11 @@ export const loginFn = async (
     });
 
     if (!user) {
-      throw new ClientError("Email salah");
+      throw new ClientError("Email belum terdaftar di Finthest");
     }
 
     if (!(await Password.verifyAsync(password, user.passwordHash))) {
-      throw new ClientError("Password salah");
+      throw new ClientError("Kata sandi anda salah");
     }
 
     const { token, expire } = Token.refresh();
@@ -57,6 +57,7 @@ export const loginFn = async (
       .status(200)
       .json({ accessToken: Token.jwt({ userId: user.id }) });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
