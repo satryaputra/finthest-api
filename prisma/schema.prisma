@@ -31,7 +31,9 @@ model InfoFinance {
   user        Users  @relation(fields: [idUsers], references: [id])
   salary      Float
   loan        Float?
-  month       Int?
+  interest    Int?
+  interestType String?
+  paidOff     Int?
   savingMoney Float?
 }
 

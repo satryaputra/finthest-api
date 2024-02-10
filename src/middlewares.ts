@@ -19,7 +19,7 @@ export const validateRequest = (
   next();
 };
 
-export const authenticated = (
+export const  authenticated = (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
@@ -29,7 +29,7 @@ export const authenticated = (
 
     const [bearer, accesstoken] = authorizationHeader.split(" ");
 
-    if (bearer !== "Bearer" || !accesstoken) {
+    if (bearer != "Bearer" || !accesstoken) {
       throw new UnauthorizedError("Perlu Otorisasi");
     }
 

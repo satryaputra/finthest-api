@@ -2,11 +2,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 export class Token {
-  static jwt = (
-    payload: string | object | Buffer,
-    secretOrPrivateKey = process.env.ACCESS_TOKEN_SECRET,
-    options?: jwt.SignOptions
-  ): string => {
+  static jwt = (payload: string | object | Buffer, secretOrPrivateKey = process.env.ACCESS_TOKEN_SECRET, options?: jwt.SignOptions): string => {
     return jwt.sign(payload, secretOrPrivateKey, {
       ...options,
       expiresIn: process.env.ACCESS_TOKEN_EXPIRE,

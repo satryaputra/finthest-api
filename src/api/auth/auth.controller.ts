@@ -27,7 +27,7 @@ authController.post(
   refreshTokenValidation,
   validateRequest,
   refreshTokenFn
-);
+);  
 
 authController.post("/logout", authenticated, logoutFn);
 
