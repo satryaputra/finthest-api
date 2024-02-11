@@ -1,9 +1,12 @@
-import type { Request, Response, NextFunction } from "express";
-import { AuthenticatedRequest, User } from "../../utils/types";
+import type { Response, NextFunction } from "express";
+import { AuthenticatedRequest } from "../../utils/types";
 import { _db } from "../../utils/_db";
-import { Token } from "../../utils/token";
 
-export const calculationFn = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response> => {
+export const calculationFn = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<Response> => {
   try {
     // Find User
     const { userId } = req.decodeToken as { userId: string };
@@ -14,7 +17,18 @@ export const calculationFn = async (req: AuthenticatedRequest, res: Response, ne
     });
 
     // Define input from FE
-    const { salary, loan, interest, interestType, paidOff, savingMoney, travelling, wishlist, wishlistTarget, wishlistBudget } = req.body;
+    const {
+      salary,
+      loan,
+      interest,
+      interestType,
+      paidOff,
+      savingMoney,
+      travelling,
+      wishlist,
+      wishlistTarget,
+      wishlistBudget,
+    } = req.body;
 
     let dailyNeeds: number;
     let loanDB: number;
