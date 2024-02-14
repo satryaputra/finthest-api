@@ -75,7 +75,7 @@ export const calculationFn = async (req: AuthenticatedRequest, res: Response, ne
         resultLoan = resultFinal;
       }
       const resultLoanFnl = resultLoan * paidOff;
-      let sisa = loanDB % resultLoanFnl;
+      let sisa = Math.ceil(loanDB % resultLoanFnl);
 
       if (sisa != 0) {
         savings = savings + sisa;
@@ -133,6 +133,27 @@ export const calculationFn = async (req: AuthenticatedRequest, res: Response, ne
         infoFinance: saveInfoFinance,
         calculation: saveCalculation,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCalculationFn = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response> => {
+  try {
+    const { userId } = req.decodeToken as { userId: string };
+    const calculation = await _db.calculation.findFirst({
+      where: {
+        idUser: userId,
+      },
+      select:{
+        idUser: true,
+        dailyNeeds: true
+      }
+    });
+    console.log(calculation);
+    return res.status(200).json({
+      data: calculation,
     });
   } catch (error) {
     next(error);
