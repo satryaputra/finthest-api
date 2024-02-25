@@ -28,15 +28,15 @@ model Users {
 }
 
 model InfoFinance {
-  id          String @id @default(uuid())
-  idUsers     String @unique
-  user        Users  @relation(fields: [idUsers], references: [id])
-  salary      Float
-  loan        Float?
-  interest    Float?
+  id           String  @id @default(uuid())
+  idUsers      String  @unique
+  user         Users   @relation(fields: [idUsers], references: [id])
+  salary       Float
+  loan         Float?
+  interest     Int?
   interestType String?
-  paidOff     Int?
-  savingMoney Float?
+  paidOff      Int?
+  savingMoney  Float?
 }
 
 model WishList {
