@@ -18,11 +18,13 @@ model Users {
   profilePhoto       String?
   refreshToken       String?
   refreshTokenExpire DateTime?
+  isHealth           Boolean       @default(true)
   createdAt          DateTime      @default(now())
   updatedAt          DateTime?
   infoFinance        InfoFinance[]
   calculation        Calculation[]
   wishList           WishList[]
+  tracking           Tracking[]
 }
 
 model InfoFinance {
@@ -40,7 +42,7 @@ model InfoFinance {
 model WishList {
   id     String  @id @default(uuid())
   wish   String?
-  idUser String? @unique
+  idUser String?
   user   Users?  @relation(fields: [idUser], references: [id])
   year   Int?
   price  Float?
@@ -48,12 +50,19 @@ model WishList {
 
 model Calculation {
   id         String  @id @default(uuid())
-  idUser     String  @unique
+  idUser     String  @unique 
   user       Users   @relation(fields: [idUser], references: [id])
   dailyNeeds Float
   dept       Float?
   saving     Float?
   donation   Float?
   wishBudget Float?
-  isHealth   Boolean @default(true)
+}
+
+model Tracking {
+  id         String  @id @default(uuid())
+  idUser     String
+  user       Users  @relation(fields: [idUser], references: [id])
+  outFor     String
+  price      Float
 }

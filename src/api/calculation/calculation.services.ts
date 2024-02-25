@@ -116,7 +116,7 @@ export const calculationFn = async (req: AuthenticatedRequest, res: Response, ne
       },
     });
 
-    // Save Input for Calculation in DB
+    // Save Input for Calculation to DB
     const saveCalculation = await _db.calculation.create({
       data: {
         idUser: user.id,
@@ -126,6 +126,16 @@ export const calculationFn = async (req: AuthenticatedRequest, res: Response, ne
         donation: donation,
       },
     });
+
+    // Save Input for Wishlist to DB
+    await _db.wishList.create({
+      data: {
+        wish: wishlist,
+        idUser: user.id,
+        year: wishlistTarget,
+        price: wishlistBudget
+      }
+    })
 
     return res.status(201).json({
       message: "Berhasil Kalkulasi",
@@ -146,13 +156,10 @@ export const getCalculationFn = async (req: AuthenticatedRequest, res: Response,
       where: {
         idUser: userId,
       },
-      select:{
-        idUser: true,
-        dailyNeeds: true
-      }
     });
     console.log(calculation);
     return res.status(200).json({
+      message: "Berhasil ambil data",
       data: calculation,
     });
   } catch (error) {
