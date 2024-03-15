@@ -137,7 +137,7 @@ export const calculationFn = async (
         dailyNeeds: dailyNeeds,
         dept: resultLoan,
         saving: savings,
-        donation: donation,
+        donation: donation
       },
     });
 

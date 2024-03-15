@@ -65,4 +65,5 @@ model Tracking {
   user       Users  @relation(fields: [idUser], references: [id])
   outFor     String
   price      Float
+  date       DateTime
 }
